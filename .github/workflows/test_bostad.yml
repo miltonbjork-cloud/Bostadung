@@ -1,0 +1,30 @@
+name: Test Bostadsnotifier
+
+on:
+  workflow_dispatch:   # gör det manuellt via GitHub
+  schedule:
+    - cron: '0 8 * * *'  # kör varje dag kl 08:00 (valfritt)
+
+jobs:
+  run-scripts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      - name: Run download_list.py
+        run: python download_list.py
+
+      - name: Run find_19_year.py
+        run: python find_19_year.py
